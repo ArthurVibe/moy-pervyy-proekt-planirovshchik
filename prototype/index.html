@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Личный планировщик с сохранением задач в этом браузере.">
+  <title>What's Up, Bro? — планировщик</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <h1>What's Up, <span>Bro?</span></h1>
+      <p class="greeting">Привет! Что запланируем?</p>
+      <p class="storage-note">Задачи сохраняются только в этом браузере. Очистка данных сайта удалит список.</p>
+    </header>
+
+    <div class="messages">
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <p id="alert" class="alert" role="alert"></p>
+      <button id="retry-load" class="secondary" type="button" hidden>Повторить загрузку</button>
+      <button id="reload-current" class="secondary" type="button" hidden>Загрузить актуальные данные</button>
+      <button id="copy-raw" class="secondary" type="button" hidden>Скопировать сохранённые данные</button>
+      <div id="raw-data-panel" class="raw-data-panel" hidden>
+        <label for="raw-data">Исходные данные</label>
+        <textarea id="raw-data" readonly spellcheck="false" aria-describedby="raw-data-hint"></textarea>
+        <p id="raw-data-hint" class="field-hint">Выделите текст и скопируйте его вручную</p>
+        <button id="hide-raw" class="secondary" type="button">Скрыть исходные данные</button>
+      </div>
+    </div>
+
+    <section class="composer" aria-labelledby="form-heading">
+      <h2 id="form-heading">Новая задача</h2>
+      <form id="task-form" novalidate>
+        <fieldset id="form-fields">
+          <div class="field">
+            <label for="task-title">Задача</label>
+            <input id="task-title" name="title" type="text" required autocomplete="off"
+                   placeholder="Что нужно сделать?" aria-describedby="title-error">
+            <p id="title-error" class="field-error" hidden></p>
+          </div>
+          <div class="date-fields">
+            <div class="field">
+              <label for="task-date">Дата <span class="optional">необязательно</span></label>
+              <input id="task-date" name="dueDate" type="date" min="2000-01-01" max="2099-12-31"
+                     aria-describedby="date-error">
+              <p id="date-error" class="field-error" hidden></p>
+            </div>
+            <div class="field">
+              <label for="task-time">Время <span class="optional">необязательно</span></label>
+              <input id="task-time" name="dueTime" type="time" step="60" disabled
+                     aria-describedby="time-hint time-error">
+              <p id="time-hint" class="field-hint">Сначала выберите дату</p>
+              <p id="time-error" class="field-error" hidden></p>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button id="clear-date" class="secondary" type="button" disabled>Без даты</button>
+            <div class="save-actions">
+              <button id="cancel-edit" class="secondary" type="button" hidden>Отмена</button>
+              <button id="save-task" class="primary" type="submit">Добавить</button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </section>
+
+    <section class="tasks" aria-label="Список задач">
+      <p id="empty-state" class="empty-state" hidden>Пока нет задач. Добавьте первую выше.</p>
+      <div id="task-groups"></div>
+      <details id="completed" class="completed" hidden>
+        <summary id="completed-heading">Выполненные · 0</summary>
+        <ul id="completed-list" class="task-list"></ul>
+      </details>
+    </section>
+    <noscript><p class="alert">Для работы планировщика включите JavaScript в браузере.</p></noscript>
+  </main>
+</body>
+</html>
