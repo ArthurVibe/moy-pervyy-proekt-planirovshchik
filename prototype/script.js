@@ -260,7 +260,35 @@
     let clockTimer;
     let loadRevision = 0;
     let lastRenderSignature = '';
+    let lastWeekDate = '';
     const canMutate = () => ready && !conflict;
+
+    function renderWeek(now = new Date()) {
+      const today = localDateKey(now);
+      if (today === lastWeekDate) return;
+      lastWeekDate = today;
+      const weekday = new Intl.DateTimeFormat('ru-RU', { weekday: 'long' });
+      const dateLabel = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+      byId('today-heading').textContent = `Сегодня — ${weekday.format(now)}`;
+      byId('page-today').textContent = `${weekday.format(now)}, ${dateLabel.format(now)}`;
+      const date = byId('today-date');
+      date.dateTime = today;
+      date.textContent = dateLabel.format(now);
+      const monday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - (now.getDay() + 6) % 7, 12);
+      const days = Array.from({ length: 7 }, (_, offset) => {
+        const day = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + offset, 12);
+        const key = localDateKey(day);
+        const item = element('li', 'week-day');
+        item.setAttribute('aria-label', `${weekday.format(day)}, ${dateLabel.format(day)}`);
+        if (key === today) item.setAttribute('aria-current', 'date');
+        const number = element('time', '', day.getDate());
+        number.dateTime = key;
+        item.append(element('span', '', DAYS[day.getDay()]), number);
+        return item;
+      });
+      byId('week-days').replaceChildren(...days);
+      byId('current-week').hidden = false;
+    }
 
     function clearStatus() {
       clearTimeout(statusTimer);
@@ -442,6 +470,7 @@
     }
 
     function render() {
+      renderWeek();
       if (!ready) {
         groupsElement.replaceChildren();
         completedList.replaceChildren();
@@ -544,6 +573,7 @@
     }
 
     function refresh() {
+      renderWeek();
       if (!ready || conflict) return;
       try { repository.assertCurrent(); }
       catch (error) { handleError(error); }

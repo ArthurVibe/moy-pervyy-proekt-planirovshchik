@@ -7,15 +7,27 @@
   <meta name="description" content="Личный планировщик с сохранением задач в этом браузере.">
   <title>What's Up, Bro? — планировщик</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="style.css?v=2">
+  <script src="script.js?v=2" defer></script>
 </head>
 <body>
-  <main class="app">
-    <header class="header">
-      <h1>What's Up, <span>Bro?</span></h1>
-      <p class="greeting">Привет! Что запланируем?</p>
+  <div class="app">
+    <aside class="sidebar" aria-label="Планировщик">
+      <div class="brand">
+        <img src="assets/bro.png" alt="" width="48" height="48">
+        <div><p class="brand-name">What's Up,<br>Bro?</p><p class="brand-tagline">Your Day. Your Rules.</p></div>
+      </div>
+      <nav aria-label="Разделы">
+        <a class="sidebar-current" href="#main-content" aria-current="page"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg> My Day, Bro!</a>
+      </nav>
       <p class="storage-note">Задачи сохраняются только в этом браузере. Очистка данных сайта удалит список.</p>
+    </aside>
+
+    <main id="main-content" class="planner-content">
+    <header class="header">
+      <p class="eyebrow">ТВОЙ ЛИЧНЫЙ ПЛАНИРОВЩИК</p>
+      <h1>My Day, Bro!</h1>
+      <p id="page-today" class="greeting">Привет! Что запланируем?</p>
     </header>
 
     <div class="messages">
@@ -76,7 +88,19 @@
         <ul id="completed-list" class="task-list"></ul>
       </details>
     </section>
+    <p class="mobile-storage-note">Задачи сохраняются только в этом браузере. Очистка данных сайта удалит список.</p>
     <noscript><p class="alert">Для работы планировщика включите JavaScript в браузере.</p></noscript>
-  </main>
+    </main>
+
+    <aside id="current-week" class="current-week" aria-labelledby="week-title" hidden>
+      <div class="week-heading">
+        <h2 id="week-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 2v6m8-6v6M4 11h16"/></svg> Дни недели</h2>
+        <p id="today-heading"></p>
+        <time id="today-date"></time>
+      </div>
+      <ol id="week-days" class="week-days" aria-label="Текущая неделя"></ol>
+      <p class="week-hint"><span aria-hidden="true"></span> Сегодня выделено рамкой</p>
+    </aside>
+  </div>
 </body>
 </html>
